@@ -83,7 +83,9 @@ class Enemy(pygame.sprite.Sprite):
     def update(self):
         if self.path_index < len(self.path):
             target_pos = self.path[self.path_index]
-            direction = pygame.math.Vector2(target_pos[0] - self.rect.centerx, target_pos[1] - self.rect.centery).normalize()
+            direction = pygame.math.Vector2(target_pos[0] - self.rect.centerx, target_pos[1] - self.rect.centery)
+            if direction.length() != 0:
+                direction = direction.normalize()
             self.rect.move_ip(direction * self.speed)
             if pygame.math.Vector2(self.rect.center).distance_to(target_pos) < self.speed:
                 self.path_index += 1
