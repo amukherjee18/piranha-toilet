@@ -32,6 +32,18 @@ projectile_image = pygame.transform.scale(projectile_image, (10, 20))
 # Fonts
 font = pygame.font.Font(None, 36)
 
+# Define the path
+path = [
+    (WIDTH // 2, HEIGHT),
+    (WIDTH // 2, HEIGHT - 150),
+    (WIDTH // 2 - 150, HEIGHT - 150),
+    (WIDTH // 2 - 150, HEIGHT - 300),
+    (WIDTH // 2 + 150, HEIGHT - 300),
+    (WIDTH // 2 + 150, HEIGHT - 450),
+    (WIDTH // 2 - 100, HEIGHT - 450),
+    (WIDTH // 2 - 100, 0)
+]
+
 # Tower class
 class Tower(pygame.sprite.Sprite):
     def __init__(self, x, y):
@@ -58,17 +70,24 @@ class Tower(pygame.sprite.Sprite):
 
 # Enemy class
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self, x, y, health=100):
+    def __init__(self, path, health=100):
         super().__init__()
         self.image = enemy_image
         self.rect = self.image.get_rect()
-        self.rect.center = (x, y)
+        self.rect.center = path[0]
+        self.path = path
+        self.path_index = 0
         self.health = health
         self.speed = 2
 
     def update(self):
-        self.rect.y -= self.speed
-        if self.rect.bottom < 0:
+        if self.path_index < len(self.path):
+            target_pos = self.path[self.path_index]
+            direction = pygame.math.Vector2(target_pos[0] - self.rect.centerx, target_pos[1] - self.rect.centery).normalize()
+            self.rect.move_ip(direction * self.speed)
+            if pygame.math.Vector2(self.rect.center).distance_to(target_pos) < self.speed:
+                self.path_index += 1
+        else:
             global score
             score += 1
             self.kill()
@@ -123,7 +142,7 @@ while running:
     
     # Spawn enemies
     if random.randint(1, 100) <= 2:
-        enemy = Enemy(WIDTH // 2, HEIGHT + 40)
+        enemy = Enemy(path)
         all_sprites.add(enemy)
         enemies.add(enemy)
     
@@ -135,7 +154,8 @@ while running:
     screen.fill(WHITE)
     
     # Draw road
-    pygame.draw.rect(screen, BLACK, (WIDTH // 2 - 25, 0, 50, HEIGHT))
+    for i in range(len(path) - 1):
+        pygame.draw.line(screen, BLACK, path[i], path[i + 1], 5)
     
     # Draw all sprites
     all_sprites.draw(screen)
