@@ -156,8 +156,9 @@ while running:
     screen.fill(WHITE)
     
     # Draw road
+    path_width = 25  # Adjust the width of the path here
     for i in range(len(path) - 1):
-        pygame.draw.line(screen, BLACK, path[i], path[i + 1], 5)
+        pygame.draw.line(screen, BLACK, path[i], path[i + 1], path_width)
     
     # Draw all sprites
     all_sprites.draw(screen)
