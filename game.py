@@ -78,7 +78,7 @@ class Enemy(pygame.sprite.Sprite):
         self.path = path
         self.path_index = 0
         self.health = health
-        self.speed = 2
+        self.speed = 2 * 0.75
 
     def update(self):
         if self.path_index < len(self.path):
@@ -106,7 +106,7 @@ class Projectile(pygame.sprite.Sprite):
         self.image = projectile_image
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
-        self.speed = 5
+        self.speed = 5 * 0.75
         self.damage = 20
         self.target = target
 
