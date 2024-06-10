@@ -9,6 +9,10 @@ WIDTH, HEIGHT = 800, 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Simple Tower Defense")
 
+# Load background image
+background_image = pygame.image.load("water.jpg")
+background_image = pygame.transform.scale(background_image, (WIDTH, HEIGHT))
+
 # Define colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -21,11 +25,14 @@ FPS = 60
 
 # Load images
 tower_image = pygame.image.load("tower.png")
-enemy_image = pygame.image.load("enemy.png")
+enemy_image = pygame.image.load("piranha.png")
 projectile_image = pygame.image.load("projectile.png")
 
+# Load sound effect
+shoot_sound = pygame.mixer.Sound("fart.wav")  # Change "shoot.wav" to your sound file
+
 # Scale images
-tower_image = pygame.transform.scale(tower_image, (50, 50))
+tower_image = pygame.transform.scale(tower_image, (80, 80))
 enemy_image = pygame.transform.scale(enemy_image, (40, 40))
 projectile_image = pygame.transform.scale(projectile_image, (10, 20))
 
@@ -67,6 +74,8 @@ class Tower(pygame.sprite.Sprite):
         projectile = Projectile(self.rect.centerx, self.rect.centery, target)
         all_sprites.add(projectile)
         projectiles.add(projectile)
+
+        shoot_sound.play()
 
 # Enemy class
 class Enemy(pygame.sprite.Sprite):
@@ -127,7 +136,7 @@ enemies = pygame.sprite.Group()
 projectiles = pygame.sprite.Group()
 
 # Create tower
-tower = Tower(WIDTH // 2 + 100, HEIGHT // 2)
+tower = Tower(WIDTH // 2 + 100, HEIGHT // 2 - 50)
 all_sprites.add(tower)
 
 # Score counter
@@ -155,6 +164,9 @@ while running:
     # Clear screen
     screen.fill(WHITE)
     
+    # Draw background
+    screen.blit(background_image, (0, 0))
+
     # Draw road
     path_width = 25  # Adjust the width of the path here
     for i in range(len(path) - 1):
