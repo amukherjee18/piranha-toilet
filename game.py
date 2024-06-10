@@ -26,7 +26,8 @@ FPS = 60
 # Load images
 tower_image = pygame.image.load("tower.png")
 enemy_image = pygame.image.load("piranha.png")
-projectile_image = pygame.image.load("projectile.png")
+projectile_image = pygame.image.load("cloud.png")
+toilet_image = pygame.image.load("toilet.png")
 
 # Load sound effect
 shoot_sound = pygame.mixer.Sound("fart.wav")  # Change "shoot.wav" to your sound file
@@ -34,7 +35,8 @@ shoot_sound = pygame.mixer.Sound("fart.wav")  # Change "shoot.wav" to your sound
 # Scale images
 tower_image = pygame.transform.scale(tower_image, (80, 80))
 enemy_image = pygame.transform.scale(enemy_image, (40, 40))
-projectile_image = pygame.transform.scale(projectile_image, (10, 20))
+projectile_image = pygame.transform.scale(projectile_image, (20, 20))
+toilet_image = pygame.transform.scale(toilet_image, (80, 80))
 
 # Fonts
 font = pygame.font.Font(None, 36)
@@ -180,6 +182,9 @@ while running:
     for enemy in enemies:
         enemy.draw_health_bar(screen)
     
+    # Draw toilet
+    screen.blit(toilet_image, (WIDTH // 2 - 150, 0))
+
     # Draw score
     score_text = font.render(f"Score: {score}", True, BLACK)
     screen.blit(score_text, (10, 10))
